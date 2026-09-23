@@ -558,3 +558,16 @@ bot.onText(/\/notice ([\s\S]+)/, async (msg, match) => {
     for (let id of userIds) { try { await bot.sendMessage(id, `📢 <b>NOTICE:</b>\n\n${match[1]}`, { parse_mode: 'HTML' }); sent++; } catch(e){} }
     bot.sendMessage(adminId, `✅ Notice sent to ${sent} users.`);
 });
+
+       const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+    res.send('Bot is running successfully!');
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});
+    

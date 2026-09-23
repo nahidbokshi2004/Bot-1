@@ -354,22 +354,26 @@ bot.on('callback_query', async (query) => {
         return;
     }
 
-    if (data === 'back_srv') return showServices(chatId, query.message.message_id);
-
+    if (data === 'back_srv') {
+    bot.answerCallbackQuery(query.id).catch(() => {});
+    return showServices(chatId, query.message.chat.id, query.message.message_id);
+    }
+    
 if (data.startsWith('srv_')) {
     const serviceCode = data.replace('srv_', '');
     const messageId = query.message.message_id;
+    bot.answerCallbackQuery(query.id).catch(() => {});
     return showRanges(chatId, serviceCode, messageId);
 }
 
     if (data.startsWith('buy_') || data.startsWith('getmore_')) {
-        const prefix = data.startsWith('buy_') ? 'buy_' : 'getmore_';
-        const parts = data.replace(prefix, '').split('_');
-        const srvCode = parts[0]; const range = parts.slice(1).join('_');
-        getTwoNumbers(chatId, range, srvCode, query.message.message_id);
+    bot.answerCallbackQuery(query.id).catch(() => {});
+    const prefix = data.startsWith('buy_') ? 'buy_' : 'getmore_';
+    const parts = data.replace(prefix, '').split('_');
+    const srvCode = parts[0]; 
+    const range = parts.slice(1).join('_');
+    getTwoNumbers(chatId, range, srvCode, query.message.message_id);
     }
-});
-
 const extractNum = (res) => { let n = res?.data?.data?.full_number || res?.data?.data?.copy || null; return n ? n.toString().replace(/[\s\+\-]/g, '') : null; };
 
 async function getTwoNumbers(chatId, range, srvCodeFromBtn = null, editMsgId = null) {
